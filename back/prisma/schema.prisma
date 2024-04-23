@@ -19,7 +19,7 @@ model User {
   password      String
   authoredPosts Post[]    @relation("AuthorToPost")
   likedPosts    Post[]    @relation("LikesToPost")
-  Comment       Comment[]
+  comments      Comment[]
 }
 
 model Comment {
