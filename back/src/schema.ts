@@ -11,10 +11,10 @@ export const typeDefs = gql`
     username: String!
   }
 
-  # type Mutation {
-  #   # createUser(username: String!, password: String!): CreateUserResponse!
-  #   # signIn(username: String!, password: String!): SignInResponse!
-  # }
+  type Mutation {
+    createUser(username: String!, password: String!): CreateUserResponse!
+    signIn(username: String!, password: String!): SignInResponse!
+  }
 
   type CreateUserResponse {
     code: Int!

@@ -6,6 +6,7 @@ export type JWTUser = {
   username: string
 }
 export const createJWT = (user: JWTUser) => {
+  console.log(process.env.JWT_SECRET)
   const token = jwt.sign({
     id: user.id,
     username: user.username

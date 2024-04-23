@@ -10,11 +10,34 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("file:./dev.db")
+  url      = "file:./dev.db"
 }
 
 model User {
-  id       String   @id @default(cuid())
-  username     String @unique
-  password String
+  id            String    @id @unique @default(cuid())
+  username      String    @unique
+  password      String
+  authoredPosts Post[]    @relation("AuthorToPost")
+  likedPosts    Post[]    @relation("LikesToPost")
+  Comment       Comment[]
+}
+
+model Comment {
+  id        String   @id @unique @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+model Post {
+  id        String    @id @unique @default(cuid())
+  content   String
+  createdAt DateTime  @default(now())
+  authorId  String
+  author    User      @relation("AuthorToPost", fields: [authorId], references: [id])
+  comments  Comment[]
+  likes     User[]    @relation("LikesToPost")
 }
