@@ -109,6 +109,7 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
+  getPosts: Array<Maybe<Post>>;
   getUser: Array<Maybe<User>>;
 };
 
@@ -283,6 +284,7 @@ export type PostResolvers<ContextType = Context, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getPosts?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType>;
   getUser?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
 };
 

@@ -42,8 +42,6 @@ export const deletePost: MutationResolvers['deletePost'] = async (_, {token, pos
         }
     })
 
-    console.log(deletePost);
-
     return {
       code: 201,
       message: 'Post has been deleted',
