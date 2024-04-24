@@ -14,6 +14,10 @@ export const typeDefs = gql`
   type Post {
     id: ID!
     content: String!
+    createdAt: String!
+    authorId: ID!
+    likes: Int!
+    comments: [Comment]!
   }
 
   type Comment {
@@ -27,6 +31,8 @@ export const typeDefs = gql`
     createUser(username: String!, password: String!): CreateUserResponse!
     signIn(username: String!, password: String!): SignInResponse!
     createPost(token: String!, content: String!): CreatePostResponse!
+    likePost(token: String!, postId: ID!): CreatePostResponse!
+    createComment(token: String!, text: String!, postId: ID!): CreateCommentResponse!
   }
 
   type CreateUserResponse {
@@ -49,5 +55,13 @@ export const typeDefs = gql`
     message: String!
     success: Boolean!
     post: Post
+  }
+
+  type CreateCommentResponse {
+    code: Int!
+    message: String!
+    success: Boolean!
+    post: Post
+    comment: Comment
   }
 `;
