@@ -33,6 +33,7 @@ export const typeDefs = gql`
     createPost(token: String!, content: String!): CreatePostResponse!
     likePost(token: String!, postId: ID!): CreatePostResponse!
     createComment(token: String!, text: String!, postId: ID!): CreateCommentResponse!
+    deletePost(token: String!, postId: ID!): CreatePostResponse!
   }
 
   type CreateUserResponse {

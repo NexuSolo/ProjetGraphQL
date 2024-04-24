@@ -54,10 +54,10 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
                 },
                 include: {
                     likes: true,
+                    comments: true
                 }
             })
 
-            console.log(updatedPost);
             return {
                 code: 200,
                 message: 'Like has been removed',
@@ -68,7 +68,7 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
                     authorId: updatedPost.authorId,
                     createdAt: updatedPost.createdAt.toISOString(),
                     likes: updatedPost.likes.length,
-                    comments: []
+                    comments: updatedPost.comments
                 }
             }
         }
@@ -86,6 +86,7 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
             },
             include: {
                 likes: true,
+                comments: true
             }
         })
 
@@ -99,7 +100,7 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
                 authorId: updatedPost.authorId,
                 createdAt: updatedPost.createdAt.toISOString(),
                 likes: updatedPost.likes.length,
-                comments: []
+                comments: updatedPost.comments
             }
         }
     } catch (e) {

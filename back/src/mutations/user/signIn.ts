@@ -3,7 +3,6 @@ import { MutationResolvers } from "../../types.js";
 
 export const signIn: MutationResolvers['signIn'] = async (_, {password, username}, {dataSources}) => {
   try {
-    console.log(username, password);
     const user = await dataSources.db.user.findUniqueOrThrow({where: {username}});
     const isValidPassword = await comparePassword(password, user.password)
 

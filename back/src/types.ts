@@ -55,6 +55,7 @@ export type Mutation = {
   createComment: CreateCommentResponse;
   createPost: CreatePostResponse;
   createUser: CreateUserResponse;
+  deletePost: CreatePostResponse;
   likePost: CreatePostResponse;
   signIn: SignInResponse;
 };
@@ -76,6 +77,12 @@ export type MutationCreatePostArgs = {
 export type MutationCreateUserArgs = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+
+export type MutationDeletePostArgs = {
+  postId: Scalars['ID']['input'];
+  token: Scalars['String']['input'];
 };
 
 
@@ -260,6 +267,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createComment?: Resolver<ResolversTypes['CreateCommentResponse'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'postId' | 'text' | 'token'>>;
   createPost?: Resolver<ResolversTypes['CreatePostResponse'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'content' | 'token'>>;
   createUser?: Resolver<ResolversTypes['CreateUserResponse'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'password' | 'username'>>;
+  deletePost?: Resolver<ResolversTypes['CreatePostResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'postId' | 'token'>>;
   likePost?: Resolver<ResolversTypes['CreatePostResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId' | 'token'>>;
   signIn?: Resolver<ResolversTypes['SignInResponse'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'password' | 'username'>>;
 };
