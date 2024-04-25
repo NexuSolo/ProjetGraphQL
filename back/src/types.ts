@@ -20,6 +20,7 @@ export type Scalars = {
 export type Comment = {
   __typename?: 'Comment';
   authorId: Scalars['ID']['output'];
+  authorName: Scalars['String']['output'];
   content: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   postId: Scalars['ID']['output'];
@@ -100,6 +101,7 @@ export type MutationSignInArgs = {
 export type Post = {
   __typename?: 'Post';
   authorId: Scalars['ID']['output'];
+  authorName: Scalars['String']['output'];
   comments: Array<Maybe<Comment>>;
   content: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
@@ -233,6 +235,7 @@ export type ResolversParentTypes = {
 
 export type CommentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = {
   authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  authorName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   postId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -275,6 +278,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 
 export type PostResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
   authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  authorName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   comments?: Resolver<Array<Maybe<ResolversTypes['Comment']>>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

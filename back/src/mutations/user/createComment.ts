@@ -16,6 +16,11 @@ export const createComment: MutationResolvers['createComment'] = async (_, { tok
         const post = await dataSources.db.post.findUnique({
             where: {
                 id: postId
+            },
+            include: {
+                author: true,
+                comments: true,
+                likes: true
             }
         })
         if (!post) {
@@ -30,6 +35,7 @@ export const createComment: MutationResolvers['createComment'] = async (_, { tok
         const createdComment = await dataSources.db.comment.create({
             data: {
                 content: text,
+                authorName: user.username,
                 authorId: user.id,
                 postId: postId
             }
@@ -57,14 +63,14 @@ export const createComment: MutationResolvers['createComment'] = async (_, { tok
             message: 'Comment has been created',
             success: true,
             post: {
-                id: updatedPost.id,
-                content: updatedPost.content,
-                authorId: updatedPost.authorId,
-                createdAt: updatedPost.createdAt.toISOString(),
-                likes: updatedPost.likes,
-                comments: updatedPost.comments
+                ...post,
+                createdAt: post.createdAt.toISOString(), // convert Date to string
+                authorName: post.author.username
             },
-            comment: createdComment
+            comment: {
+                ...createdComment,
+                authorName: user.username
+            }
         }
     } catch (e) {
         return {

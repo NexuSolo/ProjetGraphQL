@@ -16,6 +16,7 @@ export const typeDefs = gql`
     id: ID!
     content: String!
     createdAt: String!
+    authorName: String!
     authorId: ID!
     likes: [User]!
     comments: [Comment]!
@@ -24,6 +25,7 @@ export const typeDefs = gql`
   type Comment {
     id: ID!
     content: String!
+    authorName: String!
     authorId: ID!
     postId: ID!
   }

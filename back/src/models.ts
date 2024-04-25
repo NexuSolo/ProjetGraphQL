@@ -1,9 +1,6 @@
 export type User = {
   id: string
   username: String
-  authoredPosts: Post[]
-  likedPosts: Post[]
-  comments: Comment[]
 }
 
 export type Comment = {
@@ -11,6 +8,7 @@ export type Comment = {
   content: String
   user: User
   authorId: String
+  authorName: String
   postId: String
 }
 
@@ -19,6 +17,7 @@ export type Post = {
   content: String
   user: User
   authorId: String
+  authorName: String
   comments: Comment[]
   likes: User[]
 }
