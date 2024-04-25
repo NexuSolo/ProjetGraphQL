@@ -14,14 +14,63 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+
+import { defineComponent } from 'vue';
 import PreviewArticle from './PreviewArticle.vue';
 
-export default {
+export default defineComponent({
   components: {
     PreviewArticle
   },
-}
+  name: 'HomeView',
+  data() {
+    return {
+      posts: [],
+    };
+  },
+  methods: {
+    async fetchPosts() {
+      const query = `
+        query {
+          getPosts {
+            authorName
+            comments {
+              authorName
+              content
+              id
+              postId
+            }
+            content
+            createdAt
+            id
+            likes {
+              username
+              id
+            }
+          }
+        }
+      `;
+      try {
+        const response = await fetch('http://localhost:4000/graphql', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query }),
+        });
+        console.log('response:', response.json());
+      } catch (error) {
+        console.error('Erreur lors de la récupération des posts:', error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchPosts();
+  },
+});
+
+
 </script>
 
 <style scoped>
