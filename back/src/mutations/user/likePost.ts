@@ -12,6 +12,7 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
                 post: null,
             }
         }
+
         const post = await dataSources.db.post.findUnique({
             where: {
                 id: postId
@@ -54,7 +55,8 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
                 },
                 include: {
                     likes: true,
-                    comments: true
+                    comments: true,
+                    author: true
                 }
             })
 
@@ -66,6 +68,7 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
                     id: updatedPost.id,
                     content: updatedPost.content,
                     authorId: updatedPost.authorId,
+                    authorName: updatedPost.authorName,
                     createdAt: updatedPost.createdAt.toISOString(),
                     likes: updatedPost.likes,
                     comments: updatedPost.comments
@@ -98,6 +101,7 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
                 id: updatedPost.id,
                 content: updatedPost.content,
                 authorId: updatedPost.authorId,
+                authorName: updatedPost.authorName,
                 createdAt: updatedPost.createdAt.toISOString(),
                 likes: updatedPost.likes,
                 comments: updatedPost.comments

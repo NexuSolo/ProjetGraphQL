@@ -23,21 +23,23 @@ model User {
 }
 
 model Comment {
-  id        String   @id @unique @default(cuid())
-  content   String
-  createdAt DateTime @default(now())
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  id         String   @id @unique @default(cuid())
+  content    String
+  createdAt  DateTime @default(now())
+  authorId   String
+  authorName String
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  postId     String
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Post {
-  id        String    @id @unique @default(cuid())
-  content   String
-  createdAt DateTime  @default(now())
-  authorId  String
-  author    User      @relation("AuthorToPost", fields: [authorId], references: [id], onDelete: Cascade)
-  comments  Comment[]
-  likes     User[]    @relation("LikesToPost")
+  id         String    @id @unique @default(cuid())
+  content    String
+  createdAt  DateTime  @default(now())
+  authorName String
+  authorId   String
+  author     User      @relation("AuthorToPost", fields: [authorId], references: [id], onDelete: Cascade)
+  comments   Comment[]
+  likes      User[]    @relation("LikesToPost")
 }
