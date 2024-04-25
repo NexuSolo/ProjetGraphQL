@@ -61,7 +61,7 @@ export const createComment: MutationResolvers['createComment'] = async (_, { tok
                 content: updatedPost.content,
                 authorId: updatedPost.authorId,
                 createdAt: updatedPost.createdAt.toISOString(),
-                likes: updatedPost.likes.length,
+                likes: updatedPost.likes,
                 comments: updatedPost.comments
             },
             comment: createdComment

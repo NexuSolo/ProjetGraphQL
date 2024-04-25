@@ -67,7 +67,7 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
                     content: updatedPost.content,
                     authorId: updatedPost.authorId,
                     createdAt: updatedPost.createdAt.toISOString(),
-                    likes: updatedPost.likes.length,
+                    likes: updatedPost.likes,
                     comments: updatedPost.comments
                 }
             }
@@ -99,7 +99,7 @@ export const likePost: MutationResolvers['likePost'] = async (_, { token, postId
                 content: updatedPost.content,
                 authorId: updatedPost.authorId,
                 createdAt: updatedPost.createdAt.toISOString(),
-                likes: updatedPost.likes.length,
+                likes: updatedPost.likes,
                 comments: updatedPost.comments
             }
         }

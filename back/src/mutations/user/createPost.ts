@@ -28,7 +28,7 @@ export const createPost: MutationResolvers['createPost'] = async (_, {token, con
         content: createdPost.content,
         authorId: createdPost.authorId,
         createdAt: createdPost.createdAt.toISOString(),
-        likes: 0,
+        likes: [],
         comments: []
       }
     }

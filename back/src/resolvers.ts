@@ -24,9 +24,9 @@ export const resolvers: Resolvers = {
       return posts.map(post => ({
         ...post,
         createdAt: post.createdAt.toISOString(),
-        likes: post.likes.length, // return the number of likes
+        likes: post.likes
       }));
-    },
+    }
   },
 
   Mutation: {
