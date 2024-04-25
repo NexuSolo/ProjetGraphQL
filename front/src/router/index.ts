@@ -1,21 +1,38 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import PageAccueil from '../components/PageAccueil.vue'
+import PageConnection from '../components/PageConnection.vue'
+import PageInscription from '../components/PageInscription.vue'
+import CreationArticle from '../components/CreationArticle.vue'
+import VisionnerArticle from '../components/VisionnerArticle.vue'
+
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
-            name: 'home',
-            component: HomeView
+            name: 'accueil',
+            component: PageAccueil
         },
         {
-            path: '/about',
-            name: 'about',
-            // route level code-splitting
-            // this generates a separate chunk (About.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import('../views/AboutView.vue')
+            path: '/connexion',
+            name: 'connection',
+            component: PageConnection
+        },
+        {
+            path: '/inscription',
+            name: 'inscription',
+            component: PageInscription
+        },
+        {
+            path: '/creation-article',
+            name: 'creation-article',
+            component: CreationArticle
+        },
+        {
+            path: '/visionner-article/:id',
+            name: 'visionner-article',
+            component: VisionnerArticle
         }
     ]
 })
