@@ -1,22 +1,55 @@
 <template>
 
     <div>
-        <h1>Creer un article</h1>
+        <h1>Creer un post</h1>
 
         <!-- textarea pour rediger -->
-        <div class="content">
-            <input class="titre" v-model="titre" placeholder="Titre de l'article" required>
-            <textarea class="contenu" v-model="article" placeholder="Contenu de l'article" required></textarea>
-            <!-- publier -->
-            <button class="button-submit" type="submit">Publier</button>
-        </div>
+        <form @submit.prevent="createPost">
+            <div class="content">
+                <textarea class="contenu" v-model="content" placeholder="Contenu de l'article" required></textarea>
+                <!-- publier -->
+                <button class="button-submit" type="submit">Publier</button>
+            </div>
+        </form>
     
     </div>
 
 </template>
 
 <script>
+import gql from 'graphql-tag';
 
+export default {
+    data() {
+        return {
+            content: '',
+            token: localStorage.getItem('token')
+        };
+    },
+    // Requête pour créer un article
+    methods: {
+        createPost: async function(){
+            await this.$apollo.mutate({
+                mutation: gql`
+                    mutation CreatePost($token: String!, $content: String!) {
+                        createPost(token: $token, content: $content) {
+                            message
+                            success
+                        }
+                    }
+                `,
+                variables: {
+                    content: this.content,
+                    token: this.token
+                }
+            }).then(({ data }) => {
+                this.$router.push('/');
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+    }
+};
 </script>
 
 <style scoped>

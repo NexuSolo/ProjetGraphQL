@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Inscription</h1>
-    <form @submit.prevent="login">
+    <form @submit.prevent="register">
       <div class="data">
         <div class="username">
           <label for="username">Nom d'utilisateur:</label>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import gql from 'graphql-tag';
 export default {
   data() {
     return {
@@ -34,11 +35,31 @@ export default {
     };
   },
   methods: {
-    register() {
-      // Simuler une connexion en affichant les informations de connexion
-      console.log('Nom d\'utilisateur:', this.username);
-      console.log('Mot de passe:', this.password);
-      // Ici, vous pouvez ajouter la logique de connexion réelle, comme l'envoi des informations de connexion à votre backend
+    register: async function(){
+      await this.$apollo.mutate({
+        mutation: gql`
+          mutation CreateUser($username: String!, $password: String!) {
+            createUser(username: $username, password: $password) {
+              code
+              message
+              success
+              user {
+                username
+                id
+              }
+            }
+          }
+        `,
+        variables: {
+          username: this.username,
+          password: this.password
+        }
+      }).then(({ data }) => {
+        this.$router.push('/');
+        this.$emit('update:isAuthenticated', true);
+      }).catch((error) => {
+        console.error(error);
+      });
     }
   }
 }

@@ -30,8 +30,8 @@ const router = createRouter({
             component: CreationArticle
         },
         {
-            path: '/visionner-article/:id',
-            name: 'visionner-article',
+            path: '/post/:id',
+            name: 'post',
             component: VisionnerArticle
         }
     ]

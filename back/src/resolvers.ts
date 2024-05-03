@@ -26,7 +26,27 @@ export const resolvers: Resolvers = {
         createdAt: post.createdAt.toISOString(),
         likes: post.likes
       }));
-    }
+    },
+    getPost: async (_: any, { postId }: any) => {
+      const post = await db.post.findUnique({
+        where: {
+          id: postId
+        },
+        include: {
+          author: true,
+          likes: true,
+          comments: true,
+        },
+      });
+      if (!post) {
+        throw new Error('Post not found');
+      }
+      return {
+        ...post,
+        createdAt: post.createdAt.toISOString(),
+        likes: post.likes
+      };
+    },
   },
 
   Mutation: {

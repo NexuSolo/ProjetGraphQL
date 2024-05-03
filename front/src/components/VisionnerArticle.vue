@@ -1,20 +1,21 @@
 <template>
 
     <div>
-        <h1>Titre de l'article</h1>
-        <p class="article-contenu">Contenu de l'article</p>
-        <!-- likes -->
-        <!-- commentaires -->
+        <p class="article-contenu">{{ post.content }}</p>
+
         <div class="react">
-            <button class="like" type="submit"><img src="../assets/like.png" alt=""></button>
-            <textarea class="texte-commenter" v-model="commentaire" placeholder="Ecrire un commentaire ..." required></textarea>
-            <button class="button-commenter" type="submit"><img class="img-commentaire" src="../assets/commenter.png" alt=""></button>
+            <button class="like" type="submit" v-on:click="like"><img src="../assets/like.png" alt=""></button>
+
+            <form @submit.prevent="createComment">
+                <textarea class="texte-commenter" v-model="text" placeholder="Ecrire un commentaire ..." required></textarea>
+                <button class="button-commenter" type="submit"><img class="img-commentaire" src="../assets/commenter.png" alt=""></button>
+            </form>
         </div>
 
         <div class="liste-commentaires">
-            <div class="commentaire">
-                <h4 class="commentaire-auteur">Test</h4>
-                <p class="commentaire-texte">Commentaire</p>
+            <div class="commentaire" v-for="(comment, index) in post.comments" :key="index">
+                <h4 class="commentaire-auteur">{{ comment.authorName }}</h4>
+                <p class="commentaire-texte">{{ comment.content }}</p>
             </div>
         </div>
     </div>
@@ -22,6 +23,105 @@
 </template>
 
 <script>
+import gql from 'graphql-tag';
+
+export default {
+    data() {
+        return {
+            post: [],
+            token: localStorage.getItem('token'),
+            text: ''
+        };
+    },
+
+    apollo: {
+        GetPost: {
+            query: gql`
+                query GetPost($postId: ID!) {
+                    getPost(postId: $postId) {
+                        authorName
+                        authorId
+                        content
+                        createdAt
+                        comments {
+                        postId
+                        id
+                        content
+                        authorName
+                        authorId
+                        }
+                        likes {
+                        username
+                        id
+                        }
+                    }
+                }
+            `,
+            variables() {
+                return {
+                    postId: this.$route.params.id
+                }
+            },
+            update(data){ 
+                this.post = data.getPost;
+                return data.getPost;
+            },
+        },
+    },
+
+    methods: {
+        like() {
+            this.$apollo.mutate({
+                mutation: gql`
+                    mutation LikePost($token: String!, $postId: ID!) {
+                        likePost(token: $token, postId: $postId) {
+                            code
+                            message
+                            success
+                        }
+                    }
+                `,
+                variables: {
+                    postId: this.$route.params.id,
+                    token: this.token
+                }
+            }).then(({ data }) => {
+                console.log(data.likePost.message);
+            }).catch((error) => {
+                console.error(error);
+            });
+        },
+
+        createComment() {
+            this.$apollo.mutate({
+                mutation: gql`
+                    mutation CreateComment($token: String!, $text: String!, $postId: ID!) {
+                        createComment(token: $token, text: $text, postId: $postId) {
+                            code
+                            message
+                            success
+                        }
+                    }
+                `,
+                variables: {
+                    postId: this.$route.params.id,
+                    token: this.token,
+                    text: this.text
+                }
+            }).then(({ data }) => {
+                console.log(data.createComment.message);
+                this.$router.push('/');
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+    },
+    beforeRouteEnter(to, from, next) {
+        next(async (vm) => {
+            await vm.$apollo.queries.GetPost.refetch();
+        });
+    },
+}
 
 </script>
 

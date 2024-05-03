@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import gql from 'graphql-tag';
 export default {
   data() {
     return {
@@ -35,10 +36,38 @@ export default {
   },
   methods: {
     login() {
-      // Simuler une connexion en affichant les informations de connexion
-      console.log('Nom d\'utilisateur:', this.username);
-      console.log('Mot de passe:', this.password);
-      // Ici, vous pouvez ajouter la logique de connexion réelle, comme l'envoi des informations de connexion à votre backend
+      this.$apollo.mutate({
+        mutation: gql`
+          mutation Mutation($username: String!, $password: String!) {
+            signIn(username: $username, password: $password) {
+              code
+              message
+              success
+              token
+              user {
+                username
+                id
+              }
+            }
+          }
+        `,
+        variables: {
+          username: this.username,
+          password: this.password
+        }
+      }).then(({ data }) => {
+          this.saveUserDate(data.signIn.user.id, data.signIn.token);
+          this.$router.push('/');
+          this.$emit('update:isAuthenticated', true);
+          console.log(data.signIn.user.username + ' is connected');
+      }).catch((error) => {
+        console.error(error);
+      });
+    },
+    saveUserDate (id, token) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('id', id);
+      this.$root.$data.userId = localStorage.getItem('id');
     }
   }
 }
