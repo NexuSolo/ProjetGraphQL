@@ -6,7 +6,7 @@
         <div class="react">
             <button class="like" type="submit" v-on:click="like"><img src="../assets/like.png" alt=""></button>
 
-            <form @submit.prevent="createComment">
+            <form @submit.prevent="createComment" class="commenter">
                 <textarea class="texte-commenter" v-model="text" placeholder="Ecrire un commentaire ..." required></textarea>
                 <button class="button-commenter" type="submit"><img class="img-commentaire" src="../assets/commenter.png" alt=""></button>
             </form>
@@ -127,6 +127,14 @@ export default {
 
 <style scoped>
 
+.commenter{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: 80%;
+    right: 0;
+}
+
 .liste-commentaires {
     display: flex;
     flex-direction: column;
@@ -177,6 +185,7 @@ export default {
 }
 
 .react{
+    position: relative;
     display: flex;
     align-items: center;
     margin-left: auto;
