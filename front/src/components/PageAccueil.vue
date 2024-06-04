@@ -1,34 +1,34 @@
 <template>
-  <div>
-    <!-- creer un article -->
-    <router-link class="button-create" to="/creation-article">Créer un article</router-link>
+    <div>
+        <!-- creer un article -->
+        <router-link class="button-create" to="/creation-article">Créer un article</router-link>
 
-  </div>
+    </div>
 
-  <div>
-    <div class="preview" v-for="(post, index) in posts" :key="index">
-        <div class="content">
-            <p>{{ post.content }}</p>
-        </div>
-        <div class="details">
-            <p class="author">Auteur: {{ post.authorName }}</p>
-            <p class="date">Date: {{ post.createdAt }}</p>
-        </div>
-        <!-- Redirect to /post/:id -->
-        <router-link :to="{ name: 'post', params: { id: post.id } }">
-            <div class="stats">
-                <div class="like">
-                    <img src="../assets/like.png" alt="like">
-                    <p>{{ post.likes.length }}</p>
-                </div>
-                <div class="comment">
-                    <img src="../assets/comment.png" alt="comment">
-                    <p>{{ post.comments.length }}</p>
-                </div>
+    <div>
+        <div class="preview" v-for="(post, index) in posts" :key="index">
+            <div class="content">
+                <p>{{ post.content }}</p>
             </div>
-        </router-link>
-  </div>
-  </div>
+            <div class="details">
+                <p class="author">Auteur: {{ post.authorName }}</p>
+                <p class="date">Date: {{ post.createdAt }}</p>
+            </div>
+            <!-- Redirect to /post/:id -->
+            <router-link :to="{ name: 'post', params: { id: post.id } }">
+                <div class="stats">
+                    <div class="like">
+                        <img src="../assets/like.png" alt="like">
+                        <p>{{ post.likes.length }}</p>
+                    </div>
+                    <div class="comment">
+                        <img src="../assets/comment.png" alt="comment">
+                        <p>{{ post.comments.length }}</p>
+                    </div>
+                </div>
+            </router-link>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -82,27 +82,48 @@ export default {
 </script>
 
 <style scoped>
+.like,
+.comment {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
 
-.button-create{
+.like img,
+.comment img {
+    transition: 0.2s;
+}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 10vw;
-  height: 3vh;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: rgb(218, 218, 218);
-  border-radius: 20px;
-  text-decoration: none;
-  color: black;
-  font-size: 2vh;
-  text-align: center;
-  padding-top: 1vh;
-  padding-bottom: 1vh;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
+.like img:hover,
+.comment img:hover {
+    opacity: 0.7;
+}
 
+.button-create {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10vw;
+    height: 3vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(218, 218, 218);
+    border-radius: 20px;
+    text-decoration: none;
+    color: black;
+    font-size: 2vh;
+    text-align: center;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    transition: 0.3s;
+
+}
+
+.button-create:hover {
+    background-color: rgb(236, 236, 236);
 }
 
 .date {
@@ -117,6 +138,7 @@ export default {
     background-color: rgb(218, 218, 218);
     border-radius: 20px;
     position: relative;
+    margin-bottom: 3vh;
 }
 
 .titre {
@@ -176,5 +198,4 @@ p {
 .eye {
     opacity: 0.7;
 }
-
 </style>

@@ -142,6 +142,7 @@ export default {
     width: 47vw;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 3vh;
     background-color: rgb(233, 233, 233);
     padding: 1vw;
     border-radius: 10px;
