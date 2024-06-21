@@ -1,0 +1,70 @@
+mutation CreateUser($username: String!, $password: String!) {
+  createUser(username: $username, password: $password) {
+    code
+    message
+    success
+    user {
+      id
+      username
+    }
+  }
+}
+
+mutation SignIn($username: String!, $password: String!) {
+  signIn(username: $username, password: $password) {
+    code
+    message
+    success
+    token
+    user {
+      id
+      username
+    }
+  }
+}
+
+mutation CreatePost($token: String!, $content: String!) {
+  createPost(token: $token, content: $content) {
+    code
+    message
+    success
+    post {
+      id
+      content
+      authorId
+      authorName
+      createdAt
+    }
+  }
+}
+
+mutation LikePost($token: String!, $postId: ID!) {
+  likePost(token: $token, postId: $postId) {
+    code
+    message
+    success
+    post {
+      id
+      content
+      authorId
+      authorName
+      createdAt
+      likes {
+        id
+        username
+      }
+    }
+  }
+}
+
+mutation EditPost($token: String!, $postId: ID!, $newContent: String!) {
+  editPost(token: $token, postId: $postId, newContent: $newContent) {
+    code
+    message
+    success
+    post {
+      id
+      content
+    }
+  }
+}
