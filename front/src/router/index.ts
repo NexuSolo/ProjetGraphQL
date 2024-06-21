@@ -4,6 +4,7 @@ import PageConnection from '../components/PageConnection.vue'
 import PageInscription from '../components/PageInscription.vue'
 import CreationArticle from '../components/CreationArticle.vue'
 import VisionnerArticle from '../components/VisionnerArticle.vue'
+import EditArticle from '../components/EditArticle.vue'
 
 
 const router = createRouter({
@@ -33,6 +34,12 @@ const router = createRouter({
             path: '/post/:id',
             name: 'post',
             component: VisionnerArticle
+        },
+        {
+            path: '/edit-article/:id',
+            name: 'EditArticle',
+            component: EditArticle,
+            props: true
         }
     ]
 })

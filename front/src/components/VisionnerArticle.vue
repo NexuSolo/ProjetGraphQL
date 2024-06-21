@@ -3,12 +3,16 @@
     <div>
         <p class="article-contenu">{{ post.content }}</p>
 
+        <button @click="editArticle(post.id)">Modifier</button>
+
         <div class="react">
             <button class="like" type="submit" v-on:click="like"><img src="../assets/like.png" alt=""></button>
 
             <form @submit.prevent="createComment" class="commenter">
-                <textarea class="texte-commenter" v-model="text" placeholder="Ecrire un commentaire ..." required></textarea>
-                <button class="button-commenter" type="submit"><img class="img-commentaire" src="../assets/commenter.png" alt=""></button>
+                <textarea class="texte-commenter" v-model="text" placeholder="Ecrire un commentaire ..."
+                    required></textarea>
+                <button class="button-commenter" type="submit"><img class="img-commentaire"
+                        src="../assets/commenter.png" alt=""></button>
             </form>
         </div>
 
@@ -62,7 +66,7 @@ export default {
                     postId: this.$route.params.id
                 }
             },
-            update(data){ 
+            update(data) {
                 this.post = data.getPost;
                 return data.getPost;
             },
@@ -91,7 +95,9 @@ export default {
                 console.error(error);
             });
         },
-
+        editArticle(id) {
+            this.$router.push({ name: 'EditArticle', params: { id: id } });
+        },
         createComment() {
             this.$apollo.mutate({
                 mutation: gql`
@@ -126,8 +132,7 @@ export default {
 </script>
 
 <style scoped>
-
-.commenter{
+.commenter {
     position: absolute;
     display: flex;
     align-items: center;
@@ -185,7 +190,7 @@ export default {
     text-align: justify;
 }
 
-.react{
+.react {
     position: relative;
     display: flex;
     align-items: center;
@@ -214,11 +219,12 @@ export default {
     background-color: #d8b3b3;
 }
 
-textarea, input {
+textarea,
+input {
     width: 50vw;
     resize: none;
     border-radius: 10px;
-    border : none;
+    border: none;
     background-color: rgb(233, 233, 233);
     font-size: 1.5vh;
     padding: 1vw;
@@ -245,12 +251,9 @@ textarea, input {
 }
 
 
-img{
+img {
     width: 2vw;
     height: 2vw;
     opacity: 0.7;
 }
-
-
-
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isUserAuthenticated">
     <h1>Connexion</h1>
     <form @submit.prevent="login">
       <div class="data">
@@ -20,7 +20,6 @@
           <router-link class="button-autre" to="/inscription">S'inscrire</router-link>
         </div>
       </div>
-
     </form>
   </div>
 </template>
@@ -33,6 +32,16 @@ export default {
       username: '',
       password: ''
     };
+  },
+  computed: {
+    isUserAuthenticated() {
+      return !!localStorage.getItem('token');
+    }
+  },
+  created() {
+    if (this.isUserAuthenticated) {
+      this.$router.push('/');
+    }
   },
   methods: {
     login() {
@@ -56,15 +65,18 @@ export default {
           password: this.password
         }
       }).then(({ data }) => {
-          this.saveUserDate(data.signIn.user.id, data.signIn.token);
-          this.$router.push('/');
-          this.$emit('update:isAuthenticated', true);
-          console.log(data.signIn.user.username + ' is connected');
+        this.saveUserDate(data.signIn.user.id, data.signIn.token);
+        localStorage.setItem('isAuthenticated', 'true');
+        this.$emit('update:isAuthenticated', true);
+        console.log(data.signIn.user.username + ' is connected');
+        this.$router.push('/').then(() => {
+          location.reload();
+        });
       }).catch((error) => {
         console.error(error);
       });
     },
-    saveUserDate (id, token) {
+    saveUserDate(id, token) {
       localStorage.setItem('token', token);
       localStorage.setItem('id', id);
       this.$root.$data.userId = localStorage.getItem('id');
@@ -74,7 +86,6 @@ export default {
 </script>
 
 <style scoped>
-
 form {
   display: flex;
   flex-direction: column;
@@ -83,14 +94,14 @@ form {
   margin: 0 auto;
   background-color: rgb(209, 209, 209);
   padding: 10px;
-  display : flex;
+  display: flex;
   flex-direction: column;
   justify-content: space-around;
   position: relative;
   border-radius: 10px;
 }
 
-.data{
+.data {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -99,18 +110,19 @@ form {
 
 }
 
-.username, .password {
+.username,
+.password {
   display: flex;
   margin-left: auto;
   margin-right: auto;
   width: 80%;
 }
 
-label{
+label {
   width: 40%;
 }
 
-.button-submit{
+.button-submit {
   background-color: rgb(228, 228, 228);
   color: rgb(0, 0, 0);
   border: none;
@@ -122,7 +134,7 @@ label{
   margin-right: auto;
 }
 
-.buttons{
+.buttons {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -133,14 +145,14 @@ label{
   transform: translateX(-50%);
 }
 
-.button-autre{
+.button-autre {
   font-size: 1.5vh;
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 10px;
 }
 
-input{
+input {
   padding: 5px;
   border-radius: 5px;
   border: none;
@@ -149,7 +161,7 @@ input{
   width: 60%;
 }
 
-.autre{
+.autre {
   display: flex;
   justify-content: center;
   position: absolute;
@@ -157,8 +169,4 @@ input{
   right: 0;
   font-size: 1.5vh;
 }
-
-
-
-
 </style>
