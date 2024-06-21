@@ -7,26 +7,25 @@
 
     <div>
         <div class="preview" v-for="(post, index) in posts" :key="index">
-            <div class="content">
-                <p>{{ post.content }}</p>
-            </div>
-            <div class="details">
-                <p class="author">Auteur: {{ post.authorName }}</p>
-                <p class="date">Date: {{ post.createdAt }}</p>
-            </div>
-            <!-- Redirect to /post/:id -->
             <router-link :to="{ name: 'post', params: { id: post.id } }">
-                <div class="stats">
-                    <div class="like">
-                        <img src="../assets/like.png" alt="like">
-                        <p>{{ post.likes.length }}</p>
-                    </div>
-                    <div class="comment">
-                        <img src="../assets/comment.png" alt="comment">
-                        <p>{{ post.comments.length }}</p>
-                    </div>
+                <div class="content">
+                    <p>{{ post.content }}</p>
+                </div>
+                <div class="details">
+                    <p class="author">Auteur: {{ post.authorName }}</p>
+                    <p class="date">Date: {{ post.createdAt }}</p>
                 </div>
             </router-link>
+            <div class="stats">
+                <div class="like">
+                    <img src="../assets/like.png" alt="like">
+                    <p>{{ post.likes.length }}</p>
+                </div>
+                <div class="comment">
+                    <img src="../assets/comment.png" alt="comment">
+                    <p>{{ post.comments.length }}</p>
+                </div>
+            </div>
         </div>
     </div>
 </template>

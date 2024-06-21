@@ -1,11 +1,14 @@
 import jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
+import dotenv from 'dotenv';
+dotenv.config();
 
 export type JWTUser = {
   id: string
   username: string
 }
 export const createJWT = (user: JWTUser) => {
+  console.log('process.env.JWT_SECRET', process.env)
   const token = jwt.sign({
     id: user.id,
     username: user.username
