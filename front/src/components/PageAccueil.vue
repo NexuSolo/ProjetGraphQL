@@ -30,35 +30,49 @@
     </div>
 </template>
 
-<script setup lang="ts">
-
-import { useQuery } from '@vue/apollo-composable'
-import { GetPostsDocument, type Post } from '@/gql/graphql';
-import { onMounted, ref, watch } from 'vue';
-
-const posts : any = ref<Post[]>([]);
-
-onMounted(async () => {
-    const { result, loading, error } = useQuery(GetPostsDocument);
-
-    watch([result], () => {
-        if (result.value?.getPosts) {
-            posts.value = result.value.getPosts.concat();
+<script lang="ts">
+import gql from 'graphql-tag';
+const GET_POSTS = gql`
+  query GetPosts {
+    getPosts {
+      authorId
+      authorName
+      content
+      createdAt
+      id
+      comments {
+        id
+      }
+      likes {
+        id
+      }
+    }
+  }
+`;
+export default {
+    data() {
+        return {
+            posts: [],
+        };
+    },
+    apollo: {
+        getPosts: {
+            query: GET_POSTS,
+            update(data) {
+                this.posts = data.getPosts;
+                return data.getPosts;
+            }
         }
-    });
-
-    watch([loading], () => {
-        if (loading.value) {
-            console.log('loading');
-        }
-    });
-
-    watch([error], () => {
-        if (error.value) {
-            console.log('error');
-        }
-    });
-});
+    },
+    beforeRouteEnter(to, from, next) {
+        next(async (vm) => {
+            await vm.$apollo.queries.getPosts.refetch();
+        });
+    },
+    mounted() {
+        const postId = this.$route.params.id;
+    }
+};
 
 </script>
 
