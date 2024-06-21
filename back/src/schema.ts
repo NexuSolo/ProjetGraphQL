@@ -6,6 +6,8 @@ export const typeDefs = gql`
     getUser: [User]!
     getPosts: [Post]!
     getPost(postId: ID!): Post!
+    getPostsOrderByAuthorName: [Post]!
+    getPostsOrderByLikes: [Post]!
   }
 
   type User {
@@ -38,6 +40,7 @@ export const typeDefs = gql`
     likePost(token: String!, postId: ID!): CreatePostResponse!
     createComment(token: String!, text: String!, postId: ID!): CreateCommentResponse!
     deletePost(token: String!, postId: ID!): CreatePostResponse!
+    editPost(token: String!, postId: ID!, newContent: String!): CreatePostResponse!
   }
 
   type CreateUserResponse {
@@ -69,4 +72,5 @@ export const typeDefs = gql`
     post: Post
     comment: Comment
   }
+  
 `;

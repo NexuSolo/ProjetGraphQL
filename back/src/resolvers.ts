@@ -5,6 +5,7 @@ import { createPost } from "./mutations/user/createPost.js";
 import { likePost } from "./mutations/user/likePost.js";
 import { createComment } from "./mutations/user/createComment.js";
 import { deletePost } from "./mutations/user/deletePost.js";
+import { editPost } from "./mutations/user/editPost.js";
 import db from "./datasources/db.js";
 
 export const resolvers: Resolvers = {
@@ -19,6 +20,9 @@ export const resolvers: Resolvers = {
           author: true,
           likes: true,
           comments: true,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       });
       return posts.map(post => ({
@@ -47,6 +51,42 @@ export const resolvers: Resolvers = {
         likes: post.likes
       };
     },
+    getPostsOrderByAuthorName: async () => {
+      const posts = await db.post.findMany({
+        include: {
+          author: true,
+          likes: true,
+          comments: true,
+        },
+        orderBy: {
+          authorName: "asc",
+        },
+      });
+      return posts.map(post => ({
+        ...post,
+        createdAt: post.createdAt.toISOString(),
+        likes: post.likes
+      }));
+    },
+    getPostsOrderByLikes: async () => {
+      const posts = await db.post.findMany({
+        include: {
+          author: true,
+          likes: true,
+          comments: true,
+        },
+        orderBy: {
+          likes: {
+            _count: "desc",
+          },
+        },
+      });
+      return posts.map(post => ({
+        ...post,
+        createdAt: post.createdAt.toISOString(),
+        likes: post.likes
+      }));
+    },
   },
 
   Mutation: {
@@ -55,6 +95,7 @@ export const resolvers: Resolvers = {
     createPost,
     likePost,
     createComment,
-    deletePost
+    deletePost,
+    editPost,
   },
  };

@@ -1,23 +1,24 @@
 export type User = {
   id: string
-  username: String
+  username: string
+  password: string
 }
 
 export type Comment = {
   id: string
-  content: String
+  content: string
   user: User
-  authorId: String
-  authorName: String
-  postId: String
+  authorId: string
+  authorName: string
+  postId: string
 }
 
 export type Post = {
   id: string
-  content: String
+  content: string
   user: User
-  authorId: String
-  authorName: String
+  authorId: string
+  authorName: string
   comments: Comment[]
   likes: User[]
 }

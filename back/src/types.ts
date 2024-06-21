@@ -57,6 +57,7 @@ export type Mutation = {
   createPost: CreatePostResponse;
   createUser: CreateUserResponse;
   deletePost: CreatePostResponse;
+  editPost: CreatePostResponse;
   likePost: CreatePostResponse;
   signIn: SignInResponse;
 };
@@ -82,6 +83,13 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeletePostArgs = {
+  postId: Scalars['ID']['input'];
+  token: Scalars['String']['input'];
+};
+
+
+export type MutationEditPostArgs = {
+  newContent: Scalars['String']['input'];
   postId: Scalars['ID']['input'];
   token: Scalars['String']['input'];
 };
@@ -113,6 +121,8 @@ export type Query = {
   __typename?: 'Query';
   getPost: Post;
   getPosts: Array<Maybe<Post>>;
+  getPostsOrderByAuthorName: Array<Maybe<Post>>;
+  getPostsOrderByLikes: Array<Maybe<Post>>;
   getUser: Array<Maybe<User>>;
 };
 
@@ -278,6 +288,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createPost?: Resolver<ResolversTypes['CreatePostResponse'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'content' | 'token'>>;
   createUser?: Resolver<ResolversTypes['CreateUserResponse'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'password' | 'username'>>;
   deletePost?: Resolver<ResolversTypes['CreatePostResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'postId' | 'token'>>;
+  editPost?: Resolver<ResolversTypes['CreatePostResponse'], ParentType, ContextType, RequireFields<MutationEditPostArgs, 'newContent' | 'postId' | 'token'>>;
   likePost?: Resolver<ResolversTypes['CreatePostResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId' | 'token'>>;
   signIn?: Resolver<ResolversTypes['SignInResponse'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'password' | 'username'>>;
 };
@@ -296,6 +307,8 @@ export type PostResolvers<ContextType = Context, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<QueryGetPostArgs, 'postId'>>;
   getPosts?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType>;
+  getPostsOrderByAuthorName?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType>;
+  getPostsOrderByLikes?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType>;
   getUser?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>;
 };
 
