@@ -2,8 +2,11 @@
     <nav>
         <ul>
             <li><router-link to="/">Accueil</router-link></li>
-            <li v-if="!isAuthenticated"><router-link to="/connexion">Connexion</router-link></li>
-            <li v-else><p class="deco" @click="logout">Déconnexion</p></li>
+            <li v-if="isAuthenticated == false"><router-link to="/connexion">Connexion</router-link></li>
+            <li v-else>
+                <p class="deco" @click="logout">Déconnexion</p>
+                <p class="username">{{ username }}</p>
+            </li>
         </ul>
     </nav>
 </template>
@@ -14,27 +17,21 @@ export default {
     data() {
         return {
             isAuthenticated: false,
+            username: ''
         };
     },
     mounted() {
-        this.checkAuth();
-        console.log(this.isAuthenticated);
-        console.log(localStorage.getItem('isAuthenticated'));
+        this.isAuthenticated = localStorage.getItem('isAuthenticated')
+        this.username = localStorage.getItem('username')
     },
     methods: {
         logout() {
             localStorage.removeItem('token');
-            localStorage.setItem('isAuthenticated', 'false');
+            localStorage.setItem('isAuthenticated', false);
             this.isAuthenticated = false;
+            alert("Vous êtes déconnecté")
             this.$router.push('/');
         },
-        checkAuth() {
-            if (localStorage.getItem('isAuthenticated')) {
-                this.isAuthenticated = true;
-            } else {
-                this.isAuthenticated = false;
-            }
-        }
     }
 }
 </script>
@@ -79,5 +76,14 @@ button {
     color : black;
     margin: 0;
     padding: 0;
+}
+
+.username {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: 20px;
+    margin-top: 30px;
+    color: black;
 }
 </style>

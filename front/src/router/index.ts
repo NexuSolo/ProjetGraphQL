@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import PageAccueil from '../components/PageAccueil.vue'
 import PageConnection from '../components/PageConnection.vue'
 import PageInscription from '../components/PageInscription.vue'
-import CreationArticle from '../components/CreationArticle.vue'
-import VisionnerArticle from '../components/VisionnerArticle.vue'
+import CreationPost from '../components/CreationPost.vue'
+import Post from '../components/Post.vue'
 import EditArticle from '../components/EditArticle.vue'
 
 
@@ -28,12 +28,12 @@ const router = createRouter({
         {
             path: '/creation-article',
             name: 'creation-article',
-            component: CreationArticle
+            component: CreationPost
         },
         {
             path: '/post/:id',
             name: 'post',
-            component: VisionnerArticle
+            component: Post
         },
         {
             path: '/edit-article/:id',

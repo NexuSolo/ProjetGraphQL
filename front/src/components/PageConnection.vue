@@ -1,5 +1,4 @@
 <template>
-  <div v-if="!isUserAuthenticated">
     <h1>Connexion</h1>
     <form @submit.prevent="login">
       <div class="data">
@@ -21,54 +20,41 @@
         </div>
       </div>
     </form>
-  </div>
 </template>
 
 <script>
 import gql from 'graphql-tag';
+import { signIn } from '../graphql/mutations';
+
+const signInQuery = signIn;
+
 export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
     };
   },
   computed: {
     isUserAuthenticated() {
-      return !!localStorage.getItem('token');
-    }
-  },
-  created() {
-    if (this.isUserAuthenticated) {
-      this.$router.push('/');
+      return localStorage.getItem('isAuthenticated');
     }
   },
   methods: {
     login() {
       this.$apollo.mutate({
-        mutation: gql`
-          mutation Mutation($username: String!, $password: String!) {
-            signIn(username: $username, password: $password) {
-              code
-              message
-              success
-              token
-              user {
-                username
-                id
-              }
-            }
-          }
-        `,
+        mutation: gql(signInQuery),
         variables: {
           username: this.username,
           password: this.password
         }
       }).then(({ data }) => {
         this.saveUserDate(data.signIn.user.id, data.signIn.token);
-        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('isAuthenticated', true);
+        localStorage.setItem('username', data.signIn.user.username);
         this.$emit('update:isAuthenticated', true);
         console.log(data.signIn.user.username + ' is connected');
+        alert('Vous êtes connecté');
         this.$router.push('/').then(() => {
           location.reload();
         });

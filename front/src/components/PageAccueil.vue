@@ -1,8 +1,6 @@
 <template>
     <div>
-        <!-- creer un article -->
-        <router-link class="button-create" to="/creation-article">Créer un article</router-link>
-
+        <router-link class="button-create" to="/creation-article">Créer un post</router-link>
     </div>
 
     <div>
@@ -32,23 +30,10 @@
 
 <script lang="ts">
 import gql from 'graphql-tag';
-const GET_POSTS = gql`
-  query GetPosts {
-    getPosts {
-      authorId
-      authorName
-      content
-      createdAt
-      id
-      comments {
-        id
-      }
-      likes {
-        id
-      }
-    }
-  }
-`;
+import { getPosts } from '../graphql/queries';
+
+const GET_POSTS = gql(getPosts);
+
 export default {
     data() {
         return {

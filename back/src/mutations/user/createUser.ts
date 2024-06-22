@@ -1,5 +1,5 @@
 import { hashPassword } from "../../modules/auth.js";
-import { MutationResolvers } from "../../types.js";
+import { MutationResolvers } from "../../graphqlgenerate/types.js";
 
 export const createUser: MutationResolvers['createUser'] = async (_, {username, password}, {dataSources}) => {
   try {
