@@ -1,6 +1,12 @@
 <template>
-    <div>
+    <div class="buttons-up">
         <router-link class="button-create" to="/creation-article">Créer un post</router-link>
+        <div class="trie">
+            <select v-model="critereDeTri" @change="trierPosts">
+                <option value="date">Trier par date</option>
+                <option value="likes">Trier par likes</option>
+            </select>
+        </div>
     </div>
 
     <div>
@@ -39,6 +45,7 @@ export default {
     data() {
         return {
             posts: [],
+            critereDeTri: 'date', // Ajout d'un critère de tri initial
         };
     },
     apollo: {
@@ -46,6 +53,7 @@ export default {
             query: GET_POSTS,
             update(data) {
                 this.posts = data.getPosts;
+                this.trierPosts(); // Trier les posts juste après les avoir récupérés
                 return data.getPosts;
             }
         }
@@ -62,13 +70,65 @@ export default {
         isLikedByCurrentUser(post) {
             // print l'utilisateur qui a liké le post
             return post.likes.some((like) => like.username === localStorage.getItem('username'));
+        },
+        trierPosts() {
+            if (this.critereDeTri === 'date') {
+                this.posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            } else if (this.critereDeTri === 'likes') {
+                this.posts.sort((a, b) => b.likes.length - a.likes.length);
+            }
         }
-    }
+    },
+    watch: {
+        critereDeTri() {
+            this.trierPosts();
+        },
+    },
 };
-
 </script>
 
 <style scoped>
+
+.buttons-up {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    width: 50vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+select {
+    width: 10vw;
+    height: 5vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(218, 218, 218);
+    border-radius: 20px;
+    text-decoration: none;
+    color: black;
+    font-size: 2vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    transition: 0.3s;
+    border: none;
+    appearance: none;
+    padding: 10px;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: right;
+    text-align-last: center;
+}
+
+select:hover {
+    background-color: rgb(236, 236, 236);
+    cursor: pointer;
+}
+
+
 .like,
 .comment {
     display: flex;
@@ -93,8 +153,6 @@ export default {
     align-items: center;
     width: 10vw;
     height: 3vh;
-    margin-left: auto;
-    margin-right: auto;
     background-color: rgb(218, 218, 218);
     border-radius: 20px;
     text-decoration: none;
