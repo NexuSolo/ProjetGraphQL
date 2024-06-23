@@ -18,7 +18,8 @@
             </router-link>
             <div class="stats">
                 <div class="like">
-                    <img src="../assets/like.png" alt="like">
+                    <p v-if="isLikedByCurrentUser(post)"><img src="../assets/liked.png" alt="like"></p>
+                    <p v-else><img src="../assets/like.png" alt="like"></p>
                     <p>{{ post.likes.length }}</p>
                 </div>
                 <div class="comment">
@@ -71,6 +72,11 @@ export default {
     },
     mounted() {
         const postId = this.$route.params.id;
+    },
+    methods: {
+        isLikedByCurrentUser(post) {
+            return post.likes.some((like) => like.id === localStorage.getItem('userId'));
+        }
     }
 };
 

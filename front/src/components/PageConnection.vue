@@ -69,6 +69,8 @@ export default {
         localStorage.setItem('isAuthenticated', 'true');
         this.$emit('update:isAuthenticated', true);
         console.log(data.signIn.user.username + ' is connected');
+        localStorage.setItem('username', data.signIn.user.username);
+        localStorage.setItem('userId', data.signIn.user.id);
         this.$router.push('/').then(() => {
           location.reload();
         });

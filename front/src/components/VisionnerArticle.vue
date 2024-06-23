@@ -1,12 +1,13 @@
 <template>
-
     <div>
-        <p class="article-contenu">{{ post.content }}</p>
-
-        <button @click="editArticle(post.id)">Modifier</button>
+        <div class="content">
+            <p class="article-contenu">{{ post.content }}</p>
+            <button class="edit-button" v-if="this.username === this.author" @click="editArticle(post.id)"><img src="../assets/edit.png" alt=""></button>
+        </div>
 
         <div class="react">
-            <button class="like" type="submit" v-on:click="like"><img src="../assets/like.png" alt=""></button>
+            <button  v-if="isLikedByCurrentUser(post)" class="like" type="submit" v-on:click="like"><img src="../assets/liked.png" alt=""></button>
+            <button  v-else class="like" type="submit" v-on:click="like"><img src="../assets/like.png" alt=""></button>
 
             <form @submit.prevent="createComment" class="commenter">
                 <textarea class="texte-commenter" v-model="text" placeholder="Ecrire un commentaire ..."
@@ -34,7 +35,9 @@ export default {
         return {
             post: [],
             token: localStorage.getItem('token'),
-            text: ''
+            text: '',
+            author: null,
+            username: localStorage.getItem('username')
         };
     },
 
@@ -68,12 +71,19 @@ export default {
             },
             update(data) {
                 this.post = data.getPost;
+                console.log(data.getPost.authorName);
+                this.author = data.getPost.authorName;
                 return data.getPost;
             },
         },
     },
-
+    mounted() {
+        console.log(this.username);
+    },
     methods: {
+        isLikedByCurrentUser(post) {
+            return post.likes.some((like) => like.id === localStorage.getItem('userId'));
+        },
         like() {
             this.$apollo.mutate({
                 mutation: gql`
@@ -96,7 +106,9 @@ export default {
             });
         },
         editArticle(id) {
-            this.$router.push({ name: 'EditArticle', params: { id: id } });
+            this.$router.push({ name: 'EditArticle', params: { id: id } }).then(() => {
+                location.reload();
+            });
         },
         createComment() {
             this.$apollo.mutate({
@@ -127,11 +139,39 @@ export default {
             await vm.$apollo.queries.GetPost.refetch();
         });
     },
+    created() {
+        // Supposons que l'identifiant de l'utilisateur est stocké dans le localStorage sous la clé 'userId'
+        this.userId = localStorage.getItem('username');
+    }
 }
-
 </script>
 
 <style scoped>
+
+
+
+.content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1vw;
+    margin-top: 3vh;
+}
+
+.edit-button{
+    background-color: rgb(233, 233, 233);
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 1vh;
+    transition: 0.2s;
+}
+
+.edit-button:hover {
+    background-color: #cecece;
+}
+
+
 .commenter {
     position: absolute;
     display: flex;
@@ -180,8 +220,6 @@ export default {
 
 .article-contenu {
     width: 47vw;
-    margin-left: auto;
-    margin-right: auto;
     font-size: 1.5vh;
     font-family: Arial, sans-serif;
     background-color: rgb(233, 233, 233);

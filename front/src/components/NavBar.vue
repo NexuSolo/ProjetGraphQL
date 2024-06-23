@@ -3,7 +3,10 @@
         <ul>
             <li><router-link to="/">Accueil</router-link></li>
             <li v-if="!isAuthenticated"><router-link to="/connexion">Connexion</router-link></li>
-            <li v-else><p class="deco" @click="logout">Déconnexion</p></li>
+            <li class="info-user" v-else>
+                <p>{{ this.username }}</p>
+                <p class="deco" @click="logout"><img src="../assets/deco.png" alt=""></p>
+            </li>
         </ul>
     </nav>
 </template>
@@ -14,27 +17,34 @@ export default {
     data() {
         return {
             isAuthenticated: false,
+            username: localStorage.getItem('username')
         };
     },
     mounted() {
         this.checkAuth();
+        // console.log tout le local.storage
+        console.log(localStorage);
+
         console.log(this.isAuthenticated);
         console.log(localStorage.getItem('isAuthenticated'));
+        console.log(`L'utilisateur est ${this.isAuthenticated ? '' : 'non '}connecté`);
     },
     methods: {
         logout() {
             localStorage.removeItem('token');
             localStorage.setItem('isAuthenticated', 'false');
+            localStorage.removeItem('username');
             this.isAuthenticated = false;
             this.$router.push('/');
         },
         checkAuth() {
-            if (localStorage.getItem('isAuthenticated')) {
+            if (localStorage.getItem('isAuthenticated') === 'true') {
                 this.isAuthenticated = true;
-            } else {
+            }else {
                 this.isAuthenticated = false;
             }
-        }
+        },
+        
     }
 }
 </script>
@@ -76,8 +86,29 @@ button {
 
 .deco {
     cursor: pointer;
-    color : black;
     margin: 0;
     padding: 0;
 }
+
+.deco img {
+    width: 3vh;
+    opacity: 0.5;
+    margin-top: 0.5vh;
+}
+
+.info-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color : black;
+    margin: 0;
+    padding: 0;
+    gap : 10px;
+}
+
+.info-user p {
+    margin: 0;
+    padding: 0;
+}
+
 </style>
