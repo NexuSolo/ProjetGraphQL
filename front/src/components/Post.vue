@@ -67,14 +67,10 @@ export default {
             },
             update(data) {
                 this.post = data.getPost;
-                console.log(data.getPost.authorName);
                 this.author = data.getPost.authorName;
                 return data.getPost;
             },
         },
-    },
-    mounted() {
-        console.log(this.username);
     },
     methods: {
         isLikedByCurrentUser(post) {
@@ -88,7 +84,9 @@ export default {
                     token: this.token
                 }
             }).then(({ data }) => {
-                console.log(data.likePost.message);
+                this.$router.push(this.$route.params.id).then(() => {
+                    location.reload();
+                });
             }).catch((error) => {
                 console.error(error);
             });
@@ -100,22 +98,13 @@ export default {
         },
         createComment() {
             this.$apollo.mutate({
-                mutation: gql`
-                    mutation CreateComment($token: String!, $text: String!, $postId: ID!) {
-                        createComment(token: $token, text: $text, postId: $postId) {
-                            code
-                            message
-                            success
-                        }
-                    }
-                `,
+                mutation: gql(createCommentQuery),
                 variables: {
                     postId: this.$route.params.id,
                     token: this.token,
                     text: this.text
                 }
             }).then(({ data }) => {
-                console.log(data.createComment.message);
                 this.$router.push(this.$route.params.id).then(() => {
                     location.reload();
                 });

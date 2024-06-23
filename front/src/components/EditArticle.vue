@@ -1,24 +1,30 @@
 <template>
   <div>
-    <h1>Modification de l'article</h1>
+    <h1>Modification du post</h1>
     <textarea v-model="post.content" @input="onContentChange" rows="1"></textarea>
 
     <div>
       <button class="btn-delete" @click="deletePost">Supprimer le post</button>
-      <button :disabled="!contentModified" :class="{ 'btn-save': contentModified }" @click="saveChanges">Enregistrer les
-        modifications</button>
+      <button :disabled="!contentModified" :class="{ 'btn-save': contentModified }" @click="saveChanges">Enregistrer les modifications</button>
     </div>
   </div>
 </template>
 
 <script>
 import gql from 'graphql-tag';
+import { getPost } from '../graphql/queries';
+import { editPost } from '../graphql/mutations';
+import { deletePost } from '../graphql/mutations';
+
+const getPostQuery = getPost;
+const editPostQuery = editPost;
+const deletePostQuery = deletePost;
 
 export default {
   data() {
     return {
       post: {
-        content: '' // Initialisez post avec une propriété content vide pour éviter des erreurs
+        content: ''
       },
       originalContent: '',
       contentModified: false,
@@ -27,27 +33,7 @@ export default {
   },
   apollo: {
     GetPostById: {
-      query: gql`
-          query GetPost($postId: ID!) {
-            getPost(postId: $postId) {
-              authorName
-              authorId
-              content
-              createdAt
-              comments {
-                postId
-                id
-                content
-                authorName
-                authorId
-              }
-              likes {
-                username
-                id
-              }
-            }
-          }
-        `,
+      query: gql(getPostQuery),
       variables() {
         return {
           postId: this.$route.params.id
@@ -63,8 +49,8 @@ export default {
   methods: {
     adjustTextareaHeight(event) {
       const textarea = event.target;
-      const initialHeightInPx = window.innerHeight * 0.1; // 10vh
-      textarea.style.height = 'auto'; // Réinitialise la hauteur pour obtenir la hauteur correcte du contenu
+      const initialHeightInPx = window.innerHeight * 0.1;
+      textarea.style.height = 'auto';
       const contentHeight = textarea.scrollHeight;
       if (contentHeight > initialHeightInPx) {
         textarea.style.height = contentHeight + 'px';
@@ -78,17 +64,8 @@ export default {
     },
     async deletePost() {
     try {
-      console.log('Suppression du post:', this.$route.params.id)
       const { data } = await this.$apollo.mutate({
-        mutation: gql`
-          mutation DeletePost($token: String!, $postId: ID!) {
-            deletePost(token: $token, postId: $postId) {
-              code
-              message
-              success
-            }
-          }
-        `,
+        mutation: gql(deletePostQuery),
         variables: {
           postId: this.$route.params.id,
           token: this.token,
@@ -96,9 +73,9 @@ export default {
       });
 
       if (data.deletePost.success) {
-        this.$router.push('..'); // Redirection vers la liste des articles
+        this.$router.push('..');
       } else {
-        alert(data.deletePost.message); // Afficher le message d'erreur
+        alert(data.deletePost.message);
       }
     } catch (error) {
       console.error('Erreur lors de la suppression du post:', error);
@@ -108,27 +85,19 @@ export default {
   async saveChanges() {
       try {
         const { data } = await this.$apollo.mutate({
-          mutation: gql`
-            mutation EditPost($token: String!, $postId: ID!, $newContent: String!) {
-              editPost(token: $token, postId: $postId, newContent: $newContent) {
-                code
-                message
-                success
-              }
-            }
-          `,
+          mutation: gql(editPostQuery),
           variables: {
-            postId: this.$route.params.id, // Assurez-vous que l'ID de l'article est correctement récupéré
-            newContent: this.post.content, // Remplacez `this.post.content` par la bonne référence à votre contenu d'article dans le modèle de données
+            postId: this.$route.params.id,
+            newContent: this.post.content,
             token: this.token,
           },
         });
 
         if (data.editPost.success) {
           alert('Le contenu de l\'article a été mis à jour avec succès.');
-          this.$router.push('../post/'+this.$route.params.id); // Redirection vers la liste des articles après la mise à jour
+          this.$router.push('../post/'+this.$route.params.id);
         } else {
-          alert(data.editPost.message); // Afficher le message d'erreur si la mise à jour échoue
+          alert(data.editPost.message);
         }
       } catch (error) {
         console.error('Erreur lors de la mise à jour du post:', error);
@@ -141,10 +110,6 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* Le style reste inchangé */
-</style>
 
 <style scoped>
 textarea {
@@ -175,7 +140,6 @@ textarea:focus {
   color: white;
 }
 
-
 button {
   font-size: inherit;
   margin: 1vw;
@@ -184,8 +148,6 @@ button {
   cursor: pointer;
   border-radius: 10px;
 }
-
-
 
 button:disabled {
   background-color: grey;

@@ -38,22 +38,22 @@
 <script lang="ts">
 import gql from 'graphql-tag';
 import { getPosts } from '../graphql/queries';
+import type { Post } from '@/gql/graphql';
 
-const GET_POSTS = gql(getPosts);
-
+const getPostsQuery = getPosts;
 export default {
     data() {
         return {
-            posts: [],
-            critereDeTri: 'date', // Ajout d'un critère de tri initial
+            posts: [] as Post[], 
+            critereDeTri: 'date',
         };
     },
     apollo: {
         getPosts: {
-            query: GET_POSTS,
+            query: gql(getPostsQuery),
             update(data) {
                 this.posts = data.getPosts;
-                this.trierPosts(); // Trier les posts juste après les avoir récupérés
+                this.trierPosts();
                 return data.getPosts;
             }
         }
@@ -63,20 +63,18 @@ export default {
             await vm.$apollo.queries.getPosts.refetch();
         });
     },
-    mounted() {
-        const postId = this.$route.params.id;
-    },
     methods: {
-        isLikedByCurrentUser(post) {
-            // print l'utilisateur qui a liké le post
-            return post.likes.some((like) => like.username === localStorage.getItem('username'));
+        isLikedByCurrentUser(post: Post) {
+            return post.likes.some((like) => like?.username === localStorage.getItem('username'));
         },
         trierPosts() {
+            let postsTries: Post[] = [];
             if (this.critereDeTri === 'date') {
-                this.posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                postsTries = [...this.posts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
             } else if (this.critereDeTri === 'likes') {
-                this.posts.sort((a, b) => b.likes.length - a.likes.length);
+                postsTries = [...this.posts].sort((a, b) => b.likes.length - a.likes.length);
             }
+            this.posts = postsTries;
         }
     },
     watch: {
@@ -127,7 +125,6 @@ select:hover {
     background-color: rgb(236, 236, 236);
     cursor: pointer;
 }
-
 
 .like,
 .comment {

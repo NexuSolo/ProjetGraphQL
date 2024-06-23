@@ -49,11 +49,17 @@ export default {
           password: this.password
         }
       }).then(({ data }) => {
+        if(data.signIn.success === false) {
+          alert('Nom d\'utilisateur ou mot de passe incorrect');
+          this.username = '';
+          this.password = '';
+          return;
+        }
         this.saveUserDate(data.signIn.user.id, data.signIn.token);
         localStorage.setItem('isAuthenticated', true);
         localStorage.setItem('username', data.signIn.user.username);
         this.$emit('update:isAuthenticated', true);
-        console.log(data.signIn.user.username + ' is connected');
+        alert(data.signIn.user.username + ' est connecté');
         this.$router.push('/').then(() => {
           location.reload();
         });

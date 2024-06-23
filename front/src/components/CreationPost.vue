@@ -1,13 +1,9 @@
 <template>
-
     <div>
         <h1>Creer un post</h1>
-
-        <!-- textarea pour rediger -->
         <form @submit.prevent="createPost">
             <div class="content">
                 <textarea class="contenu" v-model="content" placeholder="Contenu du post" required></textarea>
-                <!-- publier -->
                 <button class="button-submit" type="submit">Créer le post</button>
             </div>
         </form>
@@ -29,7 +25,6 @@ export default {
             token: localStorage.getItem('token')
         };
     },
-    // Requête pour créer un article
     methods: {
         createPost: async function(){
             await this.$apollo.mutate({

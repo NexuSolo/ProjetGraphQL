@@ -22,12 +22,6 @@ export default {
     },
     mounted() {
         this.checkAuth();
-        // console.log tout le local.storage
-        console.log(localStorage);
-
-        console.log(this.isAuthenticated);
-        console.log(localStorage.getItem('isAuthenticated'));
-        console.log(`L'utilisateur est ${this.isAuthenticated ? '' : 'non '}connecté`);
     },
     methods: {
         logout() {

@@ -9,7 +9,22 @@ const app = createApp(App)
 const cache = new InMemoryCache()
 
 const apolloClient = new ApolloClient({
-    cache,
+    cache: new InMemoryCache({
+        typePolicies: {
+          Post: {
+            fields: {
+              likes: {
+                merge(existing = [], incoming) {
+                  // This is a simple merge strategy that combines existing likes with incoming likes
+                  // It assumes likes are an array of like objects
+                  // You might need to adjust this logic depending on how likes are structured
+                  return [...existing, ...incoming];
+                },
+              },
+            },
+          },
+        },
+      }),
     uri: 'http://localhost:4000/graphql',
 })
 

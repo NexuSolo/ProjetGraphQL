@@ -83,3 +83,11 @@ export const createComment = `mutation CreateComment($token: String!, $text: Str
     }
   }
 }`
+
+export const deletePost = `mutation DeletePost($token: String!, $postId: ID!) {
+  deletePost(token: $token, postId: $postId) {
+    code
+    message
+    success
+  }
+}`
