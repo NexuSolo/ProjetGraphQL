@@ -78,7 +78,7 @@ export default {
     },
     methods: {
         isLikedByCurrentUser(post) {
-            return post.likes.some((like) => like.id === localStorage.getItem('userId'));
+            return post.likes && Array.isArray(post.likes) && post.likes.some((like) => like.username === this.username);
         },
         like() {
             this.$apollo.mutate({

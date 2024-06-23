@@ -60,7 +60,8 @@ export default {
     },
     methods: {
         isLikedByCurrentUser(post) {
-            return post.likes.some((like) => like.id === localStorage.getItem('userId'));
+            // print l'utilisateur qui a liké le post
+            return post.likes.some((like) => like.username === localStorage.getItem('username'));
         }
     }
 };
