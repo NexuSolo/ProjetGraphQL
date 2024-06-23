@@ -6,6 +6,10 @@
 
 Pour lancer le serveur, il faut se mettre dans le dossier `back`
 
+- Ajouter un fichier .env
+
+``` JWT_SECRET="9a1e568d-012e-471c-948b-5d20632f1d97" ```
+
 - Installer les packages
 
 > npm install
