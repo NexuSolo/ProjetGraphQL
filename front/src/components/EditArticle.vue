@@ -81,16 +81,17 @@ export default {
       console.log('Suppression du post:', this.$route.params.id)
       const { data } = await this.$apollo.mutate({
         mutation: gql`
-          mutation DeletePost($postId: ID!) {
-            deletePost(postId: $postId) {
-              success
+          mutation DeletePost($token: String!, $postId: ID!) {
+            deletePost(token: $token, postId: $postId) {
+              code
               message
+              success
             }
           }
         `,
         variables: {
           postId: this.$route.params.id,
-
+          token: this.token,
         },
       });
 
@@ -108,24 +109,26 @@ export default {
       try {
         const { data } = await this.$apollo.mutate({
           mutation: gql`
-            mutation UpdatePost($postId: ID!, $content: String!) {
-              updatePost(postId: $postId, content: $content) {
-                success
+            mutation EditPost($token: String!, $postId: ID!, $newContent: String!) {
+              editPost(token: $token, postId: $postId, newContent: $newContent) {
+                code
                 message
+                success
               }
             }
           `,
           variables: {
             postId: this.$route.params.id, // Assurez-vous que l'ID de l'article est correctement récupéré
-            content: this.post.content, // Remplacez `this.post.content` par la bonne référence à votre contenu d'article dans le modèle de données
+            newContent: this.post.content, // Remplacez `this.post.content` par la bonne référence à votre contenu d'article dans le modèle de données
+            token: this.token,
           },
         });
 
-        if (data.updatePost.success) {
+        if (data.editPost.success) {
           alert('Le contenu de l\'article a été mis à jour avec succès.');
-          this.$router.push('/posts'); // Redirection vers la liste des articles après la mise à jour
+          this.$router.push('../post/'+this.$route.params.id); // Redirection vers la liste des articles après la mise à jour
         } else {
-          alert(data.updatePost.message); // Afficher le message d'erreur si la mise à jour échoue
+          alert(data.editPost.message); // Afficher le message d'erreur si la mise à jour échoue
         }
       } catch (error) {
         console.error('Erreur lors de la mise à jour du post:', error);
