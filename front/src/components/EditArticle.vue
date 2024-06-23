@@ -96,7 +96,7 @@ export default {
       });
 
       if (data.deletePost.success) {
-        this.$router.push('/posts'); // Redirection vers la liste des articles
+        this.$router.push('..'); // Redirection vers la liste des articles
       } else {
         alert(data.deletePost.message); // Afficher le message d'erreur
       }

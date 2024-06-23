@@ -27,6 +27,10 @@
 
 <script>
 import gql from 'graphql-tag';
+import { createUser } from '../graphql/mutations';
+
+const createUserQuery = createUser;
+
 export default {
   data() {
     return {
@@ -37,25 +41,13 @@ export default {
   methods: {
     register: async function(){
       await this.$apollo.mutate({
-        mutation: gql`
-          mutation CreateUser($username: String!, $password: String!) {
-            createUser(username: $username, password: $password) {
-              code
-              message
-              success
-              user {
-                username
-                id
-              }
-            }
-          }
-        `,
+        mutation: gql(createUserQuery),
         variables: {
           username: this.username,
           password: this.password
         }
       }).then(({ data }) => {
-        this.$router.push('/');
+        this.$router.push('/connexion');
         this.$emit('update:isAuthenticated', true);
       }).catch((error) => {
         console.error(error);

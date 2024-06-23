@@ -6,9 +6,9 @@
         <!-- textarea pour rediger -->
         <form @submit.prevent="createPost">
             <div class="content">
-                <textarea class="contenu" v-model="content" placeholder="Contenu de l'article" required></textarea>
+                <textarea class="contenu" v-model="content" placeholder="Contenu du post" required></textarea>
                 <!-- publier -->
-                <button class="button-submit" type="submit">Publier</button>
+                <button class="button-submit" type="submit">Créer le post</button>
             </div>
         </form>
     
@@ -18,6 +18,9 @@
 
 <script>
 import gql from 'graphql-tag';
+import { createPost } from '../graphql/mutations';
+
+const createPostQuery = createPost;
 
 export default {
     data() {
@@ -30,14 +33,7 @@ export default {
     methods: {
         createPost: async function(){
             await this.$apollo.mutate({
-                mutation: gql`
-                    mutation CreatePost($token: String!, $content: String!) {
-                        createPost(token: $token, content: $content) {
-                            message
-                            success
-                        }
-                    }
-                `,
+                mutation: gql(createPostQuery),
                 variables: {
                     content: this.content,
                     token: this.token

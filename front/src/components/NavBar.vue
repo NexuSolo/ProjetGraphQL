@@ -35,6 +35,7 @@ export default {
             localStorage.setItem('isAuthenticated', 'false');
             localStorage.removeItem('username');
             this.isAuthenticated = false;
+            alert("Vous êtes déconnecté")
             this.$router.push('/');
         },
         checkAuth() {

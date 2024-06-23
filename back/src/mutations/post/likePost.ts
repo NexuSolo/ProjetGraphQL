@@ -1,5 +1,5 @@
 import { getUser } from "../../modules/auth.js";
-import { MutationResolvers } from "../../types.js";
+import { MutationResolvers } from "../../graphqlgenerate/types.js";
 
 export const likePost: MutationResolvers['likePost'] = async (_, { token, postId }, { dataSources }) => {
     try {

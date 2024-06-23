@@ -1,5 +1,5 @@
 import { comparePassword, createJWT } from "../../modules/auth.js";
-import { MutationResolvers } from "../../types.js";
+import { MutationResolvers } from "../../graphqlgenerate/types.js";
 
 export const signIn: MutationResolvers['signIn'] = async (_, {password, username}, {dataSources}) => {
   try {

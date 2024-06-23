@@ -1,11 +1,4 @@
-query GetUser {
-  getUser {
-    id
-    username
-  }
-}
-
-query GetPosts {
+export const getPosts = `query GetPosts {
   getPosts {
     id
     createdAt
@@ -24,9 +17,9 @@ query GetPosts {
       postId
     }
   }
-}
+}`;
 
-query GetPost($postId: ID!) {
+export const getPost = `query GetPost($postId: ID!) {
   getPost(postId: $postId) {
     id
     createdAt
@@ -45,9 +38,9 @@ query GetPost($postId: ID!) {
       postId
     }
   }
-}
+}`
 
-query GetPostsOrderByLikes {
+export const getPostsOrderByLikes = `query GetPostsOrderByLikes {
     getPostsOrderByLikes {
         authorId
         authorName
@@ -65,9 +58,9 @@ query GetPostsOrderByLikes {
             id
         }
     }
-}
+}`
 
-query GetPostsOrderByAuthorName {
+export const GetPostsOrderByAuthorName = `query GetPostsOrderByAuthorName {
     getPostsOrderByAuthorName {
         authorId
         authorName
@@ -85,4 +78,4 @@ query GetPostsOrderByAuthorName {
             id
         }
     }
-}
+}`

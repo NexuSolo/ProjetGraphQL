@@ -1,5 +1,5 @@
 import { getUser } from "../../modules/auth.js";
-import { MutationResolvers } from "../../types.js";
+import { MutationResolvers } from "../../graphqlgenerate/types.js";
 
 export const createComment: MutationResolvers['createComment'] = async (_, { token, text, postId }, { dataSources }) => {
     try {

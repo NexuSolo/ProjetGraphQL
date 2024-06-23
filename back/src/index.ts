@@ -1,7 +1,7 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { typeDefs } from './schema.js';
-import { resolvers } from './resolvers.js';
+import { typeDefs } from './graphql/schema.js';
+import { resolvers } from './graphql/resolvers.js';
 import db from './datasources/db.js'
 import { getUser } from './modules/auth.js';
 

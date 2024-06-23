@@ -18,7 +18,7 @@
         </div>
 
         <div class="liste-commentaires">
-            <div class="commentaire" v-for="(comment, index) in post.comments" :key="index">
+            <div class="commentaire" v-for="(comment, index) in reversedComments" :key="index">
                 <h4 class="commentaire-auteur">{{ comment.authorName }}</h4>
                 <p class="commentaire-texte">{{ comment.content }}</p>
             </div>
@@ -29,6 +29,13 @@
 
 <script>
 import gql from 'graphql-tag';
+import { getPost } from '../graphql/queries';
+import { likePost } from '../graphql/mutations';
+import { createComment } from '../graphql/mutations';
+
+const getPostQuery = getPost;
+const likePostQuery = likePost;
+const createCommentQuery = createComment;
 
 export default {
     data() {
@@ -41,29 +48,18 @@ export default {
         };
     },
 
+    computed: {
+        reversedComments() {
+            if (this.post && this.post.comments) {
+                return [...this.post.comments].reverse();
+            }
+            return [];
+        }
+    },
+
     apollo: {
         GetPost: {
-            query: gql`
-                query GetPost($postId: ID!) {
-                    getPost(postId: $postId) {
-                        authorName
-                        authorId
-                        content
-                        createdAt
-                        comments {
-                        postId
-                        id
-                        content
-                        authorName
-                        authorId
-                        }
-                        likes {
-                        username
-                        id
-                        }
-                    }
-                }
-            `,
+            query: gql(getPostQuery),
             variables() {
                 return {
                     postId: this.$route.params.id
@@ -86,15 +82,7 @@ export default {
         },
         like() {
             this.$apollo.mutate({
-                mutation: gql`
-                    mutation LikePost($token: String!, $postId: ID!) {
-                        likePost(token: $token, postId: $postId) {
-                            code
-                            message
-                            success
-                        }
-                    }
-                `,
+                mutation: gql(likePostQuery),
                 variables: {
                     postId: this.$route.params.id,
                     token: this.token
@@ -128,7 +116,9 @@ export default {
                 }
             }).then(({ data }) => {
                 console.log(data.createComment.message);
-                this.$router.push('/');
+                this.$router.push(this.$route.params.id).then(() => {
+                    location.reload();
+                });
             }).catch((error) => {
                 console.error(error);
             });

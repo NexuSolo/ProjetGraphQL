@@ -1,12 +1,12 @@
-import { Resolvers } from "./types.js";
-import { createUser } from "./mutations/user/createUser.js";
-import { signIn } from "./mutations/user/signIn.js";
-import { createPost } from "./mutations/user/createPost.js";
-import { likePost } from "./mutations/user/likePost.js";
-import { createComment } from "./mutations/user/createComment.js";
-import { deletePost } from "./mutations/user/deletePost.js";
-import { editPost } from "./mutations/user/editPost.js";
-import db from "./datasources/db.js";
+import { Resolvers } from "../graphqlgenerate/types.js";
+import { createUser } from "../mutations/user/createUser.js";
+import { signIn } from "../mutations/user/signIn.js";
+import { createPost } from "../mutations/post/createPost.js";
+import { likePost } from "../mutations/post/likePost.js";
+import { createComment } from "../mutations/comment/createComment.js";
+import { deletePost } from "../mutations/post/deletePost.js";
+import { editPost } from "../mutations/post/editPost.js";
+import db from "../datasources/db.js";
 
 export const resolvers: Resolvers = {
   Query: {
