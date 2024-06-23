@@ -9,6 +9,8 @@
         </div>
     </div>
 
+    <!-- test -->
+
     <div>
         <div class="preview" v-for="(post, index) in posts" :key="index">
             <router-link :to="{ name: 'post', params: { id: post.id } }">
