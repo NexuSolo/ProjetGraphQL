@@ -2,10 +2,10 @@
     <nav>
         <ul>
             <li><router-link to="/">Accueil</router-link></li>
-            <li v-if="isAuthenticated == false"><router-link to="/connexion">Connexion</router-link></li>
-            <li v-else>
-                <p class="deco" @click="logout">Déconnexion</p>
-                <p class="username">{{ username }}</p>
+            <li v-if="!isAuthenticated"><router-link to="/connexion">Connexion</router-link></li>
+            <li class="info-user" v-else>
+                <p>{{ this.username }}</p>
+                <p class="deco" @click="logout"><img src="../assets/deco.png" alt=""></p>
             </li>
         </ul>
     </nav>
@@ -17,21 +17,35 @@ export default {
     data() {
         return {
             isAuthenticated: false,
-            username: ''
+            username: localStorage.getItem('username')
         };
     },
     mounted() {
-        this.isAuthenticated = localStorage.getItem('isAuthenticated')
-        this.username = localStorage.getItem('username')
+        this.checkAuth();
+        // console.log tout le local.storage
+        console.log(localStorage);
+
+        console.log(this.isAuthenticated);
+        console.log(localStorage.getItem('isAuthenticated'));
+        console.log(`L'utilisateur est ${this.isAuthenticated ? '' : 'non '}connecté`);
     },
     methods: {
         logout() {
             localStorage.removeItem('token');
-            localStorage.setItem('isAuthenticated', false);
+            localStorage.setItem('isAuthenticated', 'false');
+            localStorage.removeItem('username');
             this.isAuthenticated = false;
             alert("Vous êtes déconnecté")
             this.$router.push('/');
         },
+        checkAuth() {
+            if (localStorage.getItem('isAuthenticated') === 'true') {
+                this.isAuthenticated = true;
+            }else {
+                this.isAuthenticated = false;
+            }
+        },
+        
     }
 }
 </script>
@@ -73,17 +87,29 @@ button {
 
 .deco {
     cursor: pointer;
-    color : black;
     margin: 0;
     padding: 0;
 }
 
-.username {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin-right: 20px;
-    margin-top: 30px;
-    color: black;
+.deco img {
+    width: 3vh;
+    opacity: 0.5;
+    margin-top: 0.5vh;
 }
+
+.info-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color : black;
+    margin: 0;
+    padding: 0;
+    gap : 10px;
+}
+
+.info-user p {
+    margin: 0;
+    padding: 0;
+}
+
 </style>
